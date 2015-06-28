@@ -370,6 +370,12 @@ assert_equal "start\0\0\0\7ssh-dss\0\0\0\011\0\xff\xee\xdd\xcc\xbb\xaa\x99\x88\0
       buffer.write_key(key)
       assert_equal "start\000\000\000\023ecdsa-sha2-nistp521\000\000\000\bnistp521\000\000\000\205\004\001\214\240:\005}T\217\024\310\2647\0049o\372\266\367z\317\256~\262\034\217\357\234\251\307=A\311\221\237m\3736%\221\257\375M+-\200*(\354\021\320\002\265\225\350\304\360\264\307\325l\366'\202\332\204~\000\323\201\271\2671>]\240\2109\301bo2\300\t\246\225{\017\344\034\2003^\344\367\260\263[\223\276g\373\216o\021\224\3178h]3\\\216\252@rHQT\247g\207\241K\376\262\236\225=-\005\210\276", buffer.to_s
     end
+
+    def test_write_string_with_utf_8_encoded_string_of_length_including_byte_x80_or_higher
+      buffer = new("start")
+      buffer.write_string("この文字列はとても長い為文字数に0x80以上が含まれてしまう。日本語日本語日本語日本語日本語日本語")
+      assert_equal "start\0\0\0\x8b\xe3\x81\x93\xe3\x81\xae\xe6\x96\x87\xe5\xad\x97\xe5\x88\x97\xe3\x81\xaf\xe3\x81\xa8\xe3\x81\xa6\xe3\x82\x82\xe9\x95\xb7\xe3\x81\x84\xe7\x82\xba\xe6\x96\x87\xe5\xad\x97\xe6\x95\xb0\xe3\x81\xab\x30\x78\x38\x30\xe4\xbb\xa5\xe4\xb8\x8a\xe3\x81\x8c\xe5\x90\xab\xe3\x81\xbe\xe3\x82\x8c\xe3\x81\xa6\xe3\x81\x97\xe3\x81\xbe\xe3\x81\x86\xe3\x80\x82\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e", buffer.to_s
+    end
   end
 
   private
