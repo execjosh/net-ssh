@@ -68,7 +68,7 @@ module Net; module SSH
     # Creates a new buffer, initialized to the given content. The position
     # is initialized to the beginning of the buffer.
     def initialize(content="")
-      @content = content.to_s
+      @content = content.to_s.force_encoding("ASCII-8BIT")
       @position = 0
     end
 
@@ -140,7 +140,7 @@ module Net; module SSH
     # Appends the given text to the end of the buffer. Does not alter the
     # read position. Returns the buffer object itself.
     def append(text)
-      @content << text
+      @content << text.force_encoding("ASCII-8BIT")
       self
     end
 
@@ -281,7 +281,7 @@ module Net; module SSH
     # Writes the given data literally into the string. Does not alter the
     # read position. Returns the buffer object.
     def write(*data)
-      data.each { |datum| @content << datum }
+      data.each { |datum| @content << datum.force_encoding("ASCII-8BIT") }
       self
     end
 
@@ -292,7 +292,7 @@ module Net; module SSH
       n.each do |i|
         hi = (i >> 32) & 0xFFFFFFFF
         lo = i & 0xFFFFFFFF
-        @content << [hi, lo].pack("N2")
+        @content << [hi, lo].pack("N2").force_encoding("ASCII-8BIT")
       end
       self
     end
@@ -301,7 +301,7 @@ module Net; module SSH
     # long (4-byte) integer. Does not alter the read position. Returns the
     # buffer object.
     def write_long(*n)
-      @content << n.pack("N*")
+      @content << n.pack("N*").force_encoding("ASCII-8BIT")
       self
     end
 
@@ -317,7 +317,7 @@ module Net; module SSH
     # Does not alter the read position. Returns the buffer object.
     def write_string(*text)
       text.each do |string|
-        s = string.to_s
+        s = string.to_s.force_encoding("ASCII-8BIT")
         write_long(s.bytesize)
         write(s)
       end
